@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电子元器件管理系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>电子元器件管理系统</h1>
+            <div class="header-controls">
+                <button id="syncBtn" class="btn btn-primary">同步数据</button>
+                <button id="addBtn" class="btn btn-success">添加元器件</button>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <input type="text" id="searchInput" placeholder="搜索器件名称、编号或类别..." class="search-input">
+        </div>
+
+        <div class="stats-section">
+            <div class="stat-card">
+                <span class="stat-number" id="totalCount">0</span>
+                <span class="stat-label">总计</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="lowStockCount">0</span>
+                <span class="stat-label">库存不足</span>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table id="componentsTable">
+                <thead>
+                    <tr>
+                        <th>器件名称</th>
+                        <th>类别</th>
+                        <th>器件编号</th>
+                        <th>存放位置</th>
+                        <th>封装类型</th>
+                        <th>参数值</th>
+                        <th>库存数量</th>
+                        <th>数据手册</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 添加/编辑模态框 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">添加元器件</h2>
+                <span class="close">&times;</span>
+            </div>
+            <form id="componentForm">
+                <div class="form-group">
+                    <label for="name">器件名称:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">类别:</label>
+                    <input type="text" id="category" required>
+                </div>
+                <div class="form-group">
+                    <label for="partNumber">器件编号:</label>
+                    <input type="text" id="partNumber" required>
+                </div>
+                <div class="form-group">
+                    <label for="location">存放位置:</label>
+                    <input type="text" id="location">
+                </div>
+                <div class="form-group">
+                    <label for="package">封装类型:</label>
+                    <input type="text" id="package">
+                </div>
+                <div class="form-group">
+                    <label for="parameters">参数值:</label>
+                    <textarea id="parameters" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="stock">库存数量:</label>
+                    <input type="number" id="stock" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="datasheet">数据手册链接:</label>
+                    <input type="url" id="datasheet">
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

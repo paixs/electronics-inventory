@@ -1,0 +1,82 @@
+[
+  {
+    "name": "AMS1117-3.3",
+    "category": "线性稳压器(LDO)",
+    "partNumber": "C347223",
+    "location": "1",
+    "package": "SOT-223",
+    "parameters": "输出电压5V，输出电流1A，耐压12V",
+    "stock": 10,
+    "datasheet": ""
+  },
+  {
+    "name": "AMS1117-3.3",
+    "category": "线性稳压器(LDO)",
+    "partNumber": "C347222",
+    "location": "1",
+    "package": "SOT-223",
+    "parameters": "输入电压12V，输出电压5.3V，输出电流1A",
+    "stock": 8,
+    "datasheet": ""
+  },
+  {
+    "name": "AMS1117-3.3",
+    "category": "线性稳压器(LDO)",
+    "partNumber": "C5120796",
+    "location": "1",
+    "package": "SOT-89",
+    "parameters": "输入电压18V，输出电压3.3V，输出电流1A",
+    "stock": 15,
+    "datasheet": ""
+  },
+  {
+    "name": "ANR3015T100M",
+    "category": "功率电感",
+    "partNumber": "C6364790",
+    "location": "2",
+    "package": "SMD,7x6.5mm",
+    "parameters": "电感值10uH，额定电流9.2A，饱和电流9.2A，精度±20%",
+    "stock": 3,
+    "datasheet": ""
+  },
+  {
+    "name": "APH25201DT2K2M",
+    "category": "功率电感",
+    "partNumber": "C5349606",
+    "location": "2",
+    "package": "1008",
+    "parameters": "电感值2.2uH，额定电流2.1A，饱和电流3A，精度±20%",
+    "stock": 5,
+    "datasheet": ""
+  },
+  {
+    "name": "DSIC-04-TS-OER",
+    "category": "拨码开关",
+    "partNumber": "C7471374",
+    "location": "3",
+    "package": "SMD",
+    "parameters": "单刀单掷，开关位数：4位，间距2.54mm",
+    "stock": 2,
+    "datasheet": ""
+  },
+  {
+    "name": "TYPE-C-304-ACP16",
+    "category": "USB连接器",
+    "partNumber": "C2982555",
+    "location": "4",
+    "package": "SMD",
+    "parameters": "Type-C，母，卧贴，16p",
+    "stock": 12,
+    "datasheet": ""
+  },
+  {
+    "name": "TYPE-C-304-ACP6",
+    "category": "USB连接器",
+    "partNumber": "C2984898",
+    "location": "4",
+    "package": "SMD",
+    "parameters": "Type-C，母，卧贴，6p",
+    "stock": 8,
+    "datasheet": ""
+  }
+]
