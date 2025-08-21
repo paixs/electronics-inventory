@@ -11,9 +11,57 @@
         <header>
             <h1>电子元器件管理系统</h1>
             <div class="header-controls">
+                <button id="configBtn" class="btn btn-secondary">GitHub配置</button>
                 <button id="syncBtn" class="btn btn-primary">同步数据</button>
                 <button id="addBtn" class="btn btn-success">添加元器件</button>
             </div>
+
+    <!-- GitHub配置模态框 -->
+    <div id="configModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>GitHub同步配置</h2>
+                <span class="close-config">&times;</span>
+            </div>
+            <div class="config-content">
+                <div class="config-info">
+                    <h3>🔄 多端同步说明</h3>
+                    <p>配置GitHub后，数据将在所有设备间自动同步。</p>
+                    <p><strong>当前状态：</strong> <span id="configStatus">未配置</span></p>
+                </div>
+                
+                <form id="configForm">
+                    <div class="form-group">
+                        <label for="githubToken">GitHub Personal Access Token:</label>
+                        <input type="password" id="githubToken" placeholder="ghp_xxxxxxxxxxxxxxxx">
+                        <small>需要repo权限的Token</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="githubRepo">仓库地址:</label>
+                        <input type="text" id="githubRepo" placeholder="用户名/仓库名 (如: paixs/electronics-inventory)">
+                    </div>
+                    
+                    <div class="help-section">
+                        <details>
+                            <summary>🔧 如何获取GitHub Token？</summary>
+                            <ol>
+                                <li>访问 <a href="https://github.com/settings/tokens" target="_blank">GitHub Token设置</a></li>
+                                <li>点击 "Generate new token (classic)"</li>
+                                <li>勾选 <code>repo</code> 权限</li>
+                                <li>生成并复制Token</li>
+                            </ol>
+                        </details>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="btn btn-primary">保存配置</button>
+                        <button type="button" class="btn btn-danger" id="clearConfigBtn">清除配置</button>
+                        <button type="button" class="btn btn-secondary" id="cancelConfigBtn">取消</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
         </header>
 
         <div class="search-section">
