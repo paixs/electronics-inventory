@@ -289,7 +289,91 @@ textarea {
     border-top: 1px solid #ddd;
 }
 
-/* 响应式设计 */
+/* 配置界面特殊样式 */
+.config-content {
+    padding: 20px;
+}
+
+.config-info {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-left: 4px solid #3498db;
+}
+
+.config-info h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+}
+
+.config-info p {
+    margin: 5px 0;
+    color: #5a6c7d;
+}
+
+#configStatus {
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.status-configured {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-not-configured {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.help-section {
+    margin: 15px 0;
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 5px;
+    border: 1px solid #ffeaa7;
+}
+
+.help-section details {
+    cursor: pointer;
+}
+
+.help-section summary {
+    font-weight: bold;
+    color: #856404;
+    margin-bottom: 10px;
+}
+
+.help-section ol {
+    margin: 10px 0 0 20px;
+    color: #856404;
+}
+
+.help-section code {
+    background: #f1f3f4;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+.help-section a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.help-section a:hover {
+    text-decoration: underline;
+}
+
+small {
+    display: block;
+    color: #6c757d;
+    font-size: 0.85rem;
+    margin-top: 5px;
+}
 @media (max-width: 768px) {
     .container {
         padding: 10px;
