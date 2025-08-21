@@ -18,22 +18,35 @@ class ComponentManager {
     setupEventListeners() {
         // 按钮事件
         document.getElementById('addBtn').addEventListener('click', () => this.openModal());
+        document.getElementById('configBtn').addEventListener('click', () => this.openConfigModal());
         document.getElementById('syncBtn').addEventListener('click', () => this.syncData());
         document.getElementById('cancelBtn').addEventListener('click', () => this.closeModal());
+        document.getElementById('cancelConfigBtn').addEventListener('click', () => this.closeConfigModal());
+        document.getElementById('clearConfigBtn').addEventListener('click', () => this.clearConfig());
         
         // 表单提交
         document.getElementById('componentForm').addEventListener('submit', (e) => this.handleSubmit(e));
+        document.getElementById('configForm').addEventListener('submit', (e) => this.handleConfigSubmit(e));
         
         // 搜索功能
         document.getElementById('searchInput').addEventListener('input', (e) => this.handleSearch(e.target.value));
         
         // 模态框关闭
         document.querySelector('.close').addEventListener('click', () => this.closeModal());
+        document.querySelector('.close-config').addEventListener('click', () => this.closeConfigModal());
         document.getElementById('modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('modal')) {
                 this.closeModal();
             }
         });
+        document.getElementById('configModal').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('configModal')) {
+                this.closeConfigModal();
+            }
+        });
+        
+        // 更新配置状态显示
+        this.updateConfigStatus();
     }
 
     // 加载数据
@@ -79,7 +92,7 @@ class ComponentManager {
 
             if (response.ok) {
                 const data = await response.json();
-                const content = atob(data.content);
+                const content = decodeURIComponent(escape(atob(data.content)));
                 return JSON.parse(content);
             }
         } catch (error) {
@@ -111,8 +124,9 @@ class ComponentManager {
                 sha = fileData.sha;
             }
 
-            // 上传数据
-            const content = btoa(JSON.stringify(this.components, null, 2));
+            // 上传数据 (修复中文字符编码问题)
+            const jsonString = JSON.stringify(this.components, null, 2);
+            const content = btoa(unescape(encodeURIComponent(jsonString)));
             const uploadData = {
                 message: `更新元器件数据 - ${new Date().toLocaleString()}`,
                 content: content
@@ -180,6 +194,14 @@ class ComponentManager {
 
     // 同步数据
     async syncData() {
+        const config = this.getGitHubConfig();
+        
+        // 检查是否已配置
+        if (!config.token || !config.repo) {
+            alert('尚未配置GitHub同步。数据已保存到本地存储。\n\n如需多端同步，请点击"GitHub配置"按钮进行配置。');
+            return;
+        }
+
         const syncBtn = document.getElementById('syncBtn');
         const originalText = syncBtn.textContent;
         syncBtn.textContent = '同步中...';
@@ -188,12 +210,27 @@ class ComponentManager {
         try {
             const success = await this.saveToGitHub();
             if (success) {
-                alert('数据同步成功！');
+                alert('✅ 数据同步成功！\n所有设备现在都能看到最新数据。');
             } else {
-                alert('GitHub同步失败，数据已保存到本地');
+                alert('⚠️ GitHub同步失败，但数据已保存到本地。\n请检查网络连接和GitHub配置。');
             }
         } catch (error) {
-            alert('同步失败: ' + error.message);
+            console.error('同步详细错误:', error);
+            
+            let errorMessage = '❌ 同步失败: ';
+            if (error.message.includes('401')) {
+                errorMessage += 'GitHub Token无效或已过期，请重新配置。';
+            } else if (error.message.includes('404')) {
+                errorMessage += '仓库不存在或无访问权限，请检查仓库地址。';
+            } else if (error.message.includes('403')) {
+                errorMessage += 'GitHub API访问限制，请稍后再试。';
+            } else if (error.message.includes('Failed to fetch')) {
+                errorMessage += '网络连接失败，请检查网络连接。';
+            } else {
+                errorMessage += error.message;
+            }
+            
+            alert(errorMessage + '\n\n数据已保存到本地存储。');
         } finally {
             syncBtn.textContent = originalText;
             syncBtn.disabled = false;
@@ -350,6 +387,77 @@ class ComponentManager {
             }
         }
     }
+
+    // 打开配置模态框
+    openConfigModal() {
+        const modal = document.getElementById('configModal');
+        const config = this.getGitHubConfig();
+        
+        // 填充当前配置
+        document.getElementById('githubToken').value = config.token;
+        document.getElementById('githubRepo').value = config.repo;
+        
+        modal.style.display = 'block';
+    }
+
+    // 关闭配置模态框
+    closeConfigModal() {
+        document.getElementById('configModal').style.display = 'none';
+    }
+
+    // 处理配置表单提交
+    handleConfigSubmit(e) {
+        e.preventDefault();
+        
+        const token = document.getElementById('githubToken').value.trim();
+        const repo = document.getElementById('githubRepo').value.trim();
+        
+        if (token && repo) {
+            localStorage.setItem('github_token', token);
+            localStorage.setItem('github_repo', repo);
+            
+            this.updateConfigStatus();
+            this.closeConfigModal();
+            
+            // 显示成功消息
+            alert('GitHub配置保存成功！现在可以使用同步功能了。');
+        } else {
+            alert('请填写完整的GitHub配置信息');
+        }
+    }
+
+    // 清除配置
+    clearConfig() {
+        if (confirm('确定要清除GitHub配置吗？清除后将无法同步数据。')) {
+            localStorage.removeItem('github_token');
+            localStorage.removeItem('github_repo');
+            
+            document.getElementById('githubToken').value = '';
+            document.getElementById('githubRepo').value = '';
+            
+            this.updateConfigStatus();
+            alert('GitHub配置已清除');
+        }
+    }
+
+    // 更新配置状态显示
+    updateConfigStatus() {
+        const config = this.getGitHubConfig();
+        const statusElement = document.getElementById('configStatus');
+        const syncBtn = document.getElementById('syncBtn');
+        
+        if (config.token && config.repo) {
+            statusElement.textContent = '已配置 ✅';
+            statusElement.className = 'status-configured';
+            syncBtn.disabled = false;
+            syncBtn.title = '点击同步数据到GitHub';
+        } else {
+            statusElement.textContent = '未配置 ⚠️';
+            statusElement.className = 'status-not-configured';
+            syncBtn.disabled = false; // 仍允许点击，但会提示配置
+            syncBtn.title = '需要先配置GitHub才能同步';
+        }
+    }
 }
 
 // 初始化应用
@@ -358,9 +466,13 @@ document.addEventListener('DOMContentLoaded', () => {
     manager = new ComponentManager();
 });
 
-// GitHub配置函数（在控制台中使用）
+// GitHub配置函数（控制台备用方法）
 function setGitHubConfig(token, repo) {
     localStorage.setItem('github_token', token);
     localStorage.setItem('github_repo', repo);
     console.log('GitHub配置已保存');
+    // 如果manager已经初始化，更新状态显示
+    if (window.manager && typeof manager.updateConfigStatus === 'function') {
+        manager.updateConfigStatus();
+    }
 }
